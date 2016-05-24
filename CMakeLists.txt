@@ -30,4 +30,4 @@ install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/vcg
                   PATTERN "*.h"
                   PATTERN ".svn" EXCLUDE)
 
-cs_export()
+cs_export(INCLUDE_DIRS ${CATKIN_DEVEL_PREFIX}/include/vcg)
