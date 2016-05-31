@@ -8,21 +8,17 @@ catkin_simple()
 include(ExternalProject)
 
 file(MAKE_DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/vcg)
+if(NOT EXISTS ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
+file(WRITE ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
+endif()
 
 ExternalProject_Add(vcg_src
                     SVN_REPOSITORY svn://svn.code.sf.net/p/vcg/code/trunk/vcglib
                     CONFIGURE_COMMAND ""
                     UPDATE_COMMAND ""
-                    BUILD_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>
-                    ${CATKIN_DEVEL_PREFIX}/include/vcg
+                    BUILD_COMMAND ${CMAKE_COMMAND} -E remove -f ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp && ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${CATKIN_DEVEL_PREFIX}/include/vcg
                     INSTALL_COMMAND "")
 
-add_custom_target(copy)           
-add_custom_command(TARGET copy PRE_BUILD
-				   COMMAND ${CMAKE_COMMAND} -E
-				   copy svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/vcg/wrap/ply/plylib.cpp
-				   ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/)
-                         
 ExternalProject_Get_Property(vcg_src source_dir)
 set(VcgIncludeDir ${source_dir}/vcg)
 
