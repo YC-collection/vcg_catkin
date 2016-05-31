@@ -19,15 +19,16 @@ ExternalProject_Add(vcg_src
 ExternalProject_Get_Property(vcg_src source_dir)
 set(VcgIncludeDir ${source_dir}/vcg)
 
-cs_add_library(${PROJECT_NAME} src/dependency-tracker.cpp
-                               ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
-                               add_dependencies(${PROJECT_NAME} vcg_src)
-
 cs_install()
+
 install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/vcg
                   DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
                   FILES_MATCHING PATTERN "*.hpp"
                   PATTERN "*.h"
                   PATTERN ".svn" EXCLUDE)
+                  
+cs_add_library(${PROJECT_NAME} src/dependency-tracker.cpp
+                               ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
+                               add_dependencies(${PROJECT_NAME} vcg_src)
 
 cs_export(INCLUDE_DIRS ${CATKIN_DEVEL_PREFIX}/include/vcg)
