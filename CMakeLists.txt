@@ -8,13 +8,17 @@ catkin_simple()
 include(ExternalProject)
 
 file(MAKE_DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/vcg)
+file(WRITE ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
 
 ExternalProject_Add(vcg_src
                     SVN_REPOSITORY svn://svn.code.sf.net/p/vcg/code/trunk/vcglib
                     CONFIGURE_COMMAND ""
+                    UPDATE_COMMAND ""
                     BUILD_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>
                     ${CATKIN_DEVEL_PREFIX}/include/vcg
                     INSTALL_COMMAND "")
+           
+           message("PROJECT_SOURCE_DIR points to " <SOURCE_DIR>)
                     
 ExternalProject_Get_Property(vcg_src source_dir)
 set(VcgIncludeDir ${source_dir}/vcg)
@@ -24,6 +28,7 @@ cs_add_library(${PROJECT_NAME} src/dependency-tracker.cpp
                                add_dependencies(${PROJECT_NAME} vcg_src)
 
 cs_install()
+
 install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/vcg
                   DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
                   FILES_MATCHING PATTERN "*.hpp"
