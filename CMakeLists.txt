@@ -8,7 +8,9 @@ catkin_simple()
 include(ExternalProject)
 
 file(MAKE_DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/vcg)
+if(NOT EXISTS ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
 file(WRITE ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
+endif()
 
 ExternalProject_Add(vcg_src
                     SVN_REPOSITORY svn://svn.code.sf.net/p/vcg/code/trunk/vcglib
