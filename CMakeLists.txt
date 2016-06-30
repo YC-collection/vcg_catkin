@@ -7,31 +7,27 @@ catkin_simple()
 
 include(ExternalProject)
 
-file(MAKE_DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/vcg)
-if(NOT EXISTS ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
-file(WRITE ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
-endif()
+set(${PROJECT_NAME}_SOURCE_FILES ${CATKIN_DEVEL_PREFIX}/include/vcg)
+file(MAKE_DIRECTORY ${${PROJECT_NAME}_SOURCE_FILES})
 
 ExternalProject_Add(vcg_src
                     SVN_REPOSITORY svn://svn.code.sf.net/p/vcg/code/trunk/vcglib
                     CONFIGURE_COMMAND ""
                     UPDATE_COMMAND ""
-                    BUILD_COMMAND ${CMAKE_COMMAND} -E remove -f ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp && ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${CATKIN_DEVEL_PREFIX}/include/vcg
+                    BUILD_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${${PROJECT_NAME}_SOURCE_FILES}
                     INSTALL_COMMAND "")
 
-ExternalProject_Get_Property(vcg_src source_dir)
-set(VcgIncludeDir ${source_dir}/vcg)
-
+set_source_files_properties(${${PROJECT_NAME}_SOURCE_FILES}/wrap/ply/plylib.cpp PROPERTIES GENERATED TRUE)
 cs_add_library(${PROJECT_NAME} src/dependency-tracker.cpp
-                               ${CATKIN_DEVEL_PREFIX}/include/vcg/wrap/ply/plylib.cpp)
-                               add_dependencies(${PROJECT_NAME} vcg_src)
+                               ${${PROJECT_NAME}_SOURCE_FILES}/wrap/ply/plylib.cpp)
+add_dependencies(${PROJECT_NAME} vcg_src)
 
 cs_install()
 
-install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/vcg
+install(DIRECTORY ${${PROJECT_NAME}_SOURCE_FILES}
                   DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
                   FILES_MATCHING PATTERN "*.hpp"
                   PATTERN "*.h"
                   PATTERN ".svn" EXCLUDE)
 
-cs_export(INCLUDE_DIRS ${CATKIN_DEVEL_PREFIX}/include/vcg)
+cs_export(INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_FILES})
