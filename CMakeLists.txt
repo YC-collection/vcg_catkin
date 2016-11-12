@@ -11,7 +11,7 @@ set(${PROJECT_NAME}_SOURCE_FILES ${CATKIN_DEVEL_PREFIX}/include/vcg)
 file(MAKE_DIRECTORY ${${PROJECT_NAME}_SOURCE_FILES})
 
 ExternalProject_Add(vcg_src
-                    SVN_REPOSITORY svn://svn.code.sf.net/p/vcg/code/trunk/vcglib
+                    URL https://github.com/ethz-asl/vcglib/archive/v1.0.0.zip
                     CONFIGURE_COMMAND ""
                     UPDATE_COMMAND ""
                     BUILD_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${${PROJECT_NAME}_SOURCE_FILES}
